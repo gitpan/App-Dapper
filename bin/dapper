@@ -1,0 +1,133 @@
+#!/usr/bin/perl 
+
+#use utf8;
+use open ':std', ':encoding(UTF-8)';
+use 5.010;
+
+use strict;
+use warnings;
+
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+
+use Pod::Usage;
+use Getopt::Mixed;
+use App::Dapper;
+use File::Monitor;
+use File::Find;
+
+use Data::Dumper;
+
+my $PORT = 8000;
+
+my( $COMMAND, $SOURCE,   $OUTPUT,   $LAYOUT,   $CONFIG,       $HELP, $VERSION ) =
+  ( undef,    "_source", "_output", "_layout", "_config.yml", undef, undef );
+
+=head1 USAGE
+
+=over 5
+
+=item dapper -h          # Help
+
+=item dapper -v          # Version
+
+=item dapper -s <dir>    # Source dir name (default: _source)
+
+=item dapper -o <dir>    # Output dir name (default: _output)
+
+=item dapper -l <dir>    # Layout dir name (default: _layout)
+
+=item dapper -c <config> # Config file name (default: _project.cfg)
+
+=item dapper init        # Create new skeleton project
+
+=item dapper build       # Build site
+
+=item dapper watch       # Build + watch
+
+=item dapper serve       # Serve locally
+
+=back
+=cut
+
+sub init {
+    print "SOURCE($SOURCE)\n";
+    my $d = new App::Dapper($SOURCE, $OUTPUT, $LAYOUT, $CONFIG);
+    $d->init();
+    undef $d;
+}
+
+sub build {
+    my $d = new App::Dapper($SOURCE, $OUTPUT, $LAYOUT, $CONFIG);
+    $d->build();
+    undef $d;
+}
+
+sub serve {
+    my $d = new App::Dapper($SOURCE, $OUTPUT, $LAYOUT, $CONFIG);
+    $d->serve($PORT);
+    undef $d;
+}
+
+sub watch {
+    build();
+
+    my $monitor = File::Monitor->new();
+
+    # Add all source files and layout files and the config file to the monitor
+    find({ wanted => sub { $monitor->watch( { name => $_ } ) unless (-d $_ or $_ =~ /^\..*/); } }, $CONFIG);
+    find({ wanted => sub { $monitor->watch( { name => $_ } ) unless (-d $_ or $_ =~ /^\..*/); } }, $SOURCE);
+    find({ wanted => sub { $monitor->watch( { name => $_ } ) unless (-d $_ or $_ =~ /^\..*/); } }, $LAYOUT);
+ 
+    # First scan just finds out about the monitored files. No changes will be reported
+    $monitor->scan;
+
+    # Monitor for changes
+    while ( 1 ) { for my $change ($monitor->scan) { if ($change->is_change) { build(); last; } } sleep 1; }
+}
+
+sub help() {
+    pod2usage({-sections => [ qw(USAGE) ] });
+    exit(0);
+}
+
+sub version() {
+    print "Dapper version $App::Dapper::VERSION\n";
+    exit(0);
+}
+
+Getopt::Mixed::init(q{h
+    v   version>v
+    s=s source>s
+    o=s output>o
+    l=s layout>l
+    c=s config>c
+});
+
+while( my( $option, $value, $pretty ) = Getopt::Mixed::nextOption() ) {
+    $SOURCE = $value if $option eq 's';
+    $OUTPUT = $value if $option eq 'o';
+    $LAYOUT = $value if $option eq 'l';
+    $CONFIG = $value if $option eq 'c';
+    help()           if $option eq 'h';
+    version()        if $option eq 'v';
+}
+
+Getopt::Mixed::cleanup();
+
+$COMMAND = $ARGV[0];
+$COMMAND = "help" if not $COMMAND;
+
+my $switch = {
+  'init'    => sub { init() },
+  'build'   => sub { build() },
+  'serve'   => sub { serve() },
+  'watch'   => sub { watch() },
+  'default' => sub { help(); }
+};
+$switch->{$COMMAND} ? $switch->{$COMMAND}->() : $switch->{'default'}->();
+
+#return 1 if caller;
+#exit run(@ARGV);
+1;
+
