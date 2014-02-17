@@ -36,11 +36,11 @@ App::Dapper - A publishing platform for static websites
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 =head1 SYNOPSIS
 
@@ -79,6 +79,8 @@ Dapper allows you to transform simple text files into websites. By installing th
 
     # Build site using "project.yml" as the config file
     $ dapper -c project.yml build
+
+See the documentation for L<bin/dapper> for more information.
 
 Additionally, Dapper may be used as a perl module directly. Examples:
 
