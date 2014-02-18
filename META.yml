@@ -1,5 +1,5 @@
 ---
-abstract: 'A publishing platform for static websites'
+abstract: 'A publishing platform for static websites.'
 author:
   - 'Mark Benson <markbenson@vanilladraft.com>'
 build_requires:
@@ -25,4 +25,4 @@ requires:
   IO::Dir: 0
   Pod::Usage: 0
   perl: 5.006
-version: 0.02
+version: 0.03

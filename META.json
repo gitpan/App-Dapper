@@ -1,5 +1,5 @@
 {
-   "abstract" : "A publishing platform for static websites",
+   "abstract" : "A publishing platform for static websites.",
    "author" : [
       "Mark Benson <markbenson@vanilladraft.com>"
    ],
@@ -43,5 +43,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.02"
+   "version" : "0.03"
 }
