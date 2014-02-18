@@ -38,10 +38,11 @@
             "HTTP::Server::Brick" : "0",
             "IO::Dir" : "0",
             "Pod::Usage" : "0",
+            "Template::Liquid" : "0",
             "perl" : "5.006"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.03"
+   "version" : "0.04"
 }
