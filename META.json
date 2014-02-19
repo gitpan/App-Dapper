@@ -32,17 +32,31 @@
       },
       "runtime" : {
          "requires" : {
+            "CGI" : "0",
+            "Data::Dumper" : "0",
+            "DateTime" : "0",
+            "Exporter" : "0",
+            "ExtUtils::MakeMaker" : "0",
+            "File::Find" : "0",
+            "File::Monitor" : "0",
+            "File::Path" : "0",
             "File::Spec::Functions" : "0",
             "FindBin" : "0",
             "Getopt::Mixed" : "0",
             "HTTP::Server::Brick" : "0",
             "IO::Dir" : "0",
+            "POSIX" : "0",
             "Pod::Usage" : "0",
             "Template::Liquid" : "0",
+            "Test" : "0",
+            "Test::More" : "0",
+            "Text::MultiMarkdown" : "0",
+            "Unicode::Normalize" : "0",
+            "YAML::Tiny" : "0",
             "perl" : "5.006"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.04"
+   "version" : "0.05"
 }
