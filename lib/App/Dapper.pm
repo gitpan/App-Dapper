@@ -8,7 +8,7 @@ App::Dapper - A publishing platform for static websites.
 
 use utf8;
 use open ':std', ':encoding(UTF-8)';
-use 5.006;
+use 5.14.0;
 use strict;
 use warnings FATAL => 'all';
 
@@ -40,11 +40,11 @@ my $DEFAULT_PORT = 8000;
 
 =head1 VERSION
 
-Version 0.08
+Version 0.09
 
 =cut
 
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 our @EXPORT = qw($VERSION);
 
