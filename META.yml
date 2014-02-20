@@ -21,6 +21,7 @@ requires:
   CGI: 0
   Data::Dumper: 0
   DateTime: 0
+  DateTime::Format::XSD: 0
   Exporter: 0
   ExtUtils::MakeMaker: 0
   File::Find: 0
@@ -36,8 +37,9 @@ requires:
   Template::Liquid: 0
   Test: 0
   Test::More: 0
+  Text::Markdown: 0
   Text::MultiMarkdown: 0
   Unicode::Normalize: 0
   YAML::Tiny: 0
   perl: 5.006
-version: 0.05
+version: 0.06
