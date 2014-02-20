@@ -4,7 +4,7 @@
       "Mark Benson <markbenson@vanilladraft.com>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "ExtUtils::MakeMaker version 6.6302, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "ExtUtils::MakeMaker version 6.88, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "mit"
    ],
@@ -22,13 +22,12 @@
    "prereqs" : {
       "build" : {
          "requires" : {
-            "Getopt::Mixed" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0.98"
          }
       },
       "configure" : {
          "requires" : {
-            "ExtUtils::MakeMaker" : "0"
+            "Getopt::Mixed" : "1.11"
          }
       },
       "runtime" : {
@@ -61,5 +60,5 @@
       }
    },
    "release_status" : "stable",
-   "version" : "0.07"
+   "version" : "0.08"
 }
