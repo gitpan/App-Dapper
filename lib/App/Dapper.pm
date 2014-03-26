@@ -41,11 +41,11 @@ my $ID = 0;
 
 =head1 VERSION
 
-Version 0.11
+Version 0.12
 
 =cut
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 our @EXPORT = qw($VERSION);
 
@@ -486,7 +486,7 @@ sub read_templates {
     }
 
     # Expand sub layouts
-    for my $key (keys $self->{layout_content}) {
+    for my $key (keys %{$self->{layout_content}}) {
         my $value = $self->{layout_content}->{$key};
         my $frontmatter;
         my $content;
