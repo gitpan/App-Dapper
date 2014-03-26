@@ -37,14 +37,15 @@ use App::Dapper::Defaults;
 use App::Dapper::Filters;
 
 my $DEFAULT_PORT = 8000;
+my $ID = 0;
 
 =head1 VERSION
 
-Version 0.10
+Version 0.11
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 our @EXPORT = qw($VERSION);
 
@@ -347,7 +348,9 @@ When the site is built, it is done in three steps:
 
 sub build {
     my($self) = @_;
-    
+   
+    $ID = 0; 
+
     $self->parse();
     $self->transform();
     $self->render();
@@ -614,6 +617,8 @@ sub build_inventory {
     $page{url} =~ s/\:slug/$page{slug}/g unless not defined $page{slug};
 
     $page{id} = $page{url};
+
+    $page{id} = ++$ID; #$page{url};
 
     if (not defined $page{extension}) { $page{extension} = ".html"; }
 
