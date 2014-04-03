@@ -55,10 +55,10 @@
             "Text::MultiMarkdown" : "0",
             "Unicode::Normalize" : "0",
             "YAML::Tiny" : "0",
-            "perl" : "0"
+            "perl" : "5.014000"
          }
       }
    },
    "release_status" : "stable",
-   "version" : "0.13"
+   "version" : "0.14"
 }
