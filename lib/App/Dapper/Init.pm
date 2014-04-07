@@ -14,7 +14,7 @@ file, a layout template, and a starter post.
 
 use utf8;
 use open ':std', ':encoding(UTF-8)';
-use 5.14.0;
+use 5.8.0;
 use strict;
 use warnings FATAL => 'all';
 
@@ -50,6 +50,7 @@ my $templates_index_content = <<'TEMPLATES_INDEX_CONTENT';
 TEMPLATES_INDEX_CONTENT
 
 my $proj_file_template_content = <<'PROJ_FILE_TEMPLATE';
+# Dapper configuration file
 ---
 name : My Site
 

@@ -41,5 +41,5 @@ requires:
   Text::MultiMarkdown: 0
   Unicode::Normalize: 0
   YAML::Tiny: 0
-  perl: 5.014000
-version: 0.14
+  perl: 5.008000
+version: 0.15

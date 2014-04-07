@@ -8,7 +8,7 @@ App::Dapper - A publishing tool for static websites.
 
 use utf8;
 use open ':std', ':encoding(UTF-8)';
-use 5.14.0;
+use 5.8.0;
 use strict;
 use warnings FATAL => 'all';
 
@@ -18,7 +18,6 @@ use Exporter qw(import);
 use IO::Dir;
 use Template::Liquid;
 
-use Text::Markdown;
 use Text::MultiMarkdown 'markdown';
 use HTTP::Server::Brick;
 use YAML::Tiny qw(LoadFile Load Dump);
@@ -41,11 +40,11 @@ my $ID = 0;
 
 =head1 VERSION
 
-Version 0.14
+Version 0.15
 
 =cut
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 our @EXPORT = qw($VERSION);
 
