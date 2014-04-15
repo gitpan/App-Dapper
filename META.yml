@@ -42,4 +42,4 @@ requires:
   Unicode::Normalize: 0
   YAML::Tiny: 0
   perl: 5.008000
-version: 0.15
+version: 0.16
