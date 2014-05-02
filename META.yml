@@ -35,7 +35,8 @@ requires:
   JSON: 0
   POSIX: 0
   Pod::Usage: 0
-  Template::Liquid: 0
+  Template::Alloy: 0
+  Template::Constants: 0
   Test: 0
   Test::More: 0
   Text::Markdown: 0
@@ -43,4 +44,6 @@ requires:
   Unicode::Normalize: 0
   YAML::Tiny: 0
   perl: 5.008000
-version: 0.17
+resources:
+  repository: https://github.com/markdbenson/dapper
+version: 0.18

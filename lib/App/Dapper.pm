@@ -16,7 +16,10 @@ use vars '$VERSION';
 
 use Exporter qw(import);
 use IO::Dir;
-use Template::Liquid;
+
+#use Template;
+use Template::Alloy;
+use Template::Constants qw( :debug );
 
 use Text::MultiMarkdown 'markdown';
 use HTTP::Server::Brick;
@@ -40,11 +43,11 @@ my $ID = 0;
 
 =head1 VERSION
 
-Version 0.17
+Version 0.18
 
 =cut
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 our @EXPORT = qw($VERSION);
 
@@ -383,28 +386,45 @@ sub transform {
 sub render {
     my ($self) = @_;
 
+    my $tt = Template::Alloy->new({
+        INCLUDE_PATH => $self->{layout},
+        ANYCASE => 1,
+        ENCODING => 'utf8',
+        #STRICT => 1,
+        FILTERS => {
+            'xml_escape' => \&App::Dapper::Filters::xml_escape,
+            'date_to_xmlschema' => \&App::Dapper::Filters::date_to_xmlschema,
+            'replace_last' => \&App::Dapper::Filters::replace_last,
+            'smart' => \&App::Dapper::Filters::smart,
+            'json' => \&App::Dapper::Filters::json,
+        },
+        #DEBUG => DEBUG_ALL,
+    }) || die "$Template::ERROR\n";        
+
     for my $page (@{$self->{site}->{pages}}) {
 
         #print Dump $page->{content};
 
         if (not $page->{layout}) { $page->{layout} = "index"; }
+
         my $layout = $self->{layout_content}->{$page->{layout}};
-        
-        # Make sure we have a copy of the template file
-        my $parsed_template = Template::Liquid->parse($layout);
 
         my %tags = ();
         $tags{site} = $self->{site};
         $tags{page} = $page;
         #$tags{page}->{content} = $content;
 
-        # Render the output file using the template and the source
-        my $destination = $parsed_template->render(%tags);
+        my $destination1;
+
+        $tt->process(\$layout, \%tags, \$destination1)
+            || die $tt->error(), "\n";
 
         # Parse and render once more to make sure that any liquid statments
         # In the source file also gets rendered
-        $parsed_template = Template::Liquid->parse($destination);
-        $destination = $parsed_template->render(%tags);
+        my $destination;
+
+        $tt->process(\$destination1, \%tags, \$destination)
+            || die $tt->error(), "\n";
 
         if ($page->{filename}) {
             make_path($page->{dirname}, { verbose => 1 });
@@ -502,7 +522,7 @@ sub read_templates {
         if (not defined $self->{layout_content}->{$frontmatter->{layout}}) { next; }
 
         my $master = $self->{layout_content}->{$frontmatter->{layout}};
-        $master =~ s/\{\{ *page\.content *\}\}/$content/g;
+        $master =~ s/\[\% *page\.content *\%\]/$content/g;
         $self->{layout_content}->{$key} = $master;
 
         #print "$key Result:\n" . $self->{layout_content}->{$frontmatter->{layout}} . "\n\n\n\n\n\n";
@@ -608,26 +628,26 @@ sub build_inventory {
         time_zone  => $page{timezone},
     );
 
-    $page{url} = $self->{site}->{urlpattern};
+    $page{url} = defined $page{urlpattern} ? $page{urlpattern} : $self->{site}->{urlpattern};
     $page{url} =~ s/\:category/$page{categories}/g unless not defined $page{categories};
     $page{url} =~ s/\:year/$page{year}/g unless not defined $page{year};
     $page{url} =~ s/\:month/$page{month}/g unless not defined $page{month};
     $page{url} =~ s/\:day/$page{day}/g unless not defined $page{day};
+    $page{url} =~ s/\:hour/$page{hour}/g unless not defined $page{hour};
+    $page{url} =~ s/\:minute/$page{minute}/g unless not defined $page{minute};
+    $page{url} =~ s/\:second/$page{second}/g unless not defined $page{second};
     $page{url} =~ s/\:slug/$page{slug}/g unless not defined $page{slug};
 
     $page{id} = $page{url};
 
     $page{id} = ++$ID; #$page{url};
 
-    if (not defined $page{extension}) { $page{extension} = ".html"; }
+    if (not defined $page{extension}) { $page{extension} = $self->{site}->{extension}; }
 
     $page{source_file_extension} = App::Dapper::Utils::filter_extension($source_file_name);
 
     $page{filename} = App::Dapper::Utils::filter_stem("$destination_file_name") . $page{extension};
     
-    #print "FILENAME BEFORE: " . $page{filename} . "\n";
-    #print "FILENAME AFTER: " . $page{filename} . "\n";
-
     if(defined $page{categories}) {
         my $filename = $self->{site}->{output} . $page{url};
         $filename =~ s/\/$/\/index.html/; 
